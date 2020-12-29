@@ -7,6 +7,7 @@
 
 import UIKit
 import NetworkingService
+import Domain
 
 class PokemonListRouter {
     private let navigationController: UINavigationController
@@ -19,9 +20,24 @@ class PokemonListRouter {
     
     func toList() {
         let pokemonsUseCase = pokemonsUseCaseProivider.makePokemonsUseCase()
-        let viewModel = PokemonListViewModel(pokemonsUseCase: pokemonsUseCase)
+        let viewModel = PokemonListViewModel(
+            pokemonsUseCase: pokemonsUseCase,
+            router: self
+        )
         let controller = PokemonListViewController(viewModel: viewModel)
-        viewModel.set(view: controller)
         navigationController.viewControllers = [controller]
+    }
+    
+    func toDetails(of pokemon: Pokemon) {
+        let pokemonsUseCase = pokemonsUseCaseProivider.makePokemonsUseCase()
+        let router = PokemonDetailsRouter(navigationController: navigationController)
+        let viewModel = PokemonDetailsViewModel(
+            pokemon: pokemon,
+            pokemonsUseCase: pokemonsUseCase,
+            router: router
+        )
+        let controller = PokemonDetailsViewController(viewModel: viewModel)
+        
+        navigationController.pushViewController(controller, animated: true)
     }
 }

@@ -3,6 +3,8 @@ platform :ios, '11.0'
 target 'Domain' do
   use_frameworks!
 
+  pod 'RxSwift', '6.0.0-rc.2'
+
   target 'DomainTests' do
     # Pods for testing
   end

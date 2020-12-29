@@ -1,10 +1,10 @@
 //
 //  UIImage+Extensions.swift
-//  PokemonCheatSheet
+//  Domain
 //
 //  Created by Prokhor Kharchenko on 12/29/20.
 //
 
 import UIKit
 
-typealias Image = UIImage
+public typealias Image = UIImage

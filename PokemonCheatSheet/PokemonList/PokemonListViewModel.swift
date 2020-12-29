@@ -6,54 +6,62 @@
 //
 
 import Domain
+import RxCocoa
+import RxSwift
 
-protocol PokemonListViewModelType {
-    var pokemons: [Pokemon] { get }
-    var error: Error? { get }
-    var fetching: Bool { get }
-
-    func fetch()
-    func pokemonSelected(at indetPath: IndexPath)
-}
-
-final class PokemonListViewModel: PokemonListViewModelType {
-    var pokemons: [Pokemon] = []
-    var error: Error?
-    var fetching: Bool = false
-    
-    private weak var view: ViewUpdatable?
+final class PokemonListViewModel: ViewModelType {
     private let pokemonsUseCase: PokemonsUseCaseType
+    private let activityIndicator = ActivityIndicator()
+    private let errorTracker = ErrorTracker()
+    private let router: PokemonListRouter
     
-    init(pokemonsUseCase: PokemonsUseCaseType) {
+    init(pokemonsUseCase: PokemonsUseCaseType, router: PokemonListRouter) {
         self.pokemonsUseCase = pokemonsUseCase
-    }
-
-    func set(view: ViewUpdatable) {
-        self.view = view
-    }
-
-    func fetch() {
-        fetching = true
-        view?.update()
-        
-        pokemonsUseCase.all(filter: [:]) { [weak self] result in
-            guard let self = self else { return }
-            
-            self.fetching = false
-            
-            switch result {
-            case .success(let pokemons):
-                self.pokemons = pokemons
-                self.error = nil
-            case .failure(let error):
-                self.error = error
-            }
-            
-            self.view?.update()
-        }
+        self.router = router
     }
     
-    func pokemonSelected(at indetPath: IndexPath) {
+    func transform(input: Input) -> Output {
+        let pokemons = input.fetch
+            .flatMapLatest {
+                self.pokemonsUseCase.all(filter: [:])
+                    .trackActivity(self.activityIndicator)
+                    .trackError(self.errorTracker)
+                    .asDriverOnErrorJustComplete()
+            }
+            .map { pokemons in
+                pokemons.map {
+                    PokemonListViewCellViewModel(
+                        pokemon: $0,
+                        pokemonsUseCase: self.pokemonsUseCase
+                    )
+                }
+            }
         
+        let navigation = input.selected
+            .withLatestFrom(pokemons) { indexPath, pokemons in
+                pokemons[indexPath.row].pokemon
+            }
+            .do(onNext: router.toDetails)
+            .mapToVoid()
+        
+        return Output(
+            fetching: activityIndicator.asDriver(),
+            pokemons: pokemons,
+            error: errorTracker.asDriver(),
+            navigation: navigation
+        )
     }
+
+    struct Input {
+        let fetch: Driver<Void>
+        let selected: Driver<IndexPath>
+    }
+    
+    struct Output {
+        let fetching: Driver<Bool>
+        let pokemons: Driver<[PokemonListViewCellViewModel]>
+        let error: Driver<Error>
+        let navigation: Driver<Void>
+    }
+    
 }

@@ -7,25 +7,40 @@
 
 import Foundation
 import Domain
+import RxSwift
 
 final class PokemonsUseCase: PokemonsUseCaseType {
-    
-    lazy var stub: Pokemon = {
-        let decoder = JSONDecoder()
-        let data = string.data(using: .utf8)!
-        return try! decoder.decode(Pokemon.self, from: data)
-    }()
-    
-    func all(filter: [String : String], completion: @escaping (Result<[Pokemon], Error>) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            completion(.success([self.stub, self.stub, self.stub, self.stub, self.stub, self.stub]))
+    func all(filter: [String : String]) -> Observable<[Pokemon]> {
+        let result = (1...5).map(stub)
+        return Observable.create { observer in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                observer.onNext(result)
+                observer.onCompleted()
+            }
+            return Disposables.create()
         }
     }
     
-    func get(by id: Int, completion: @escaping (Result<Pokemon, Error>) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            completion(.success(self.stub))
+    func get(by id: Int) -> Observable<Pokemon> {
+        let result = stub(0)
+        return Observable.create { observer in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                observer.onNext(result)
+                observer.onCompleted()
+            }
+            return Disposables.create()
         }
+    }
+    
+    func image(for url: String) -> Observable<Image> {
+        return .just(Image(named: "image", in: Bundle(for: type(of:self)), compatibleWith: nil)!)
+    }
+    
+    private func stub(_ int: Int) -> Pokemon {
+        let decoder = JSONDecoder()
+        let data = string.data(using: .utf8)!
+        return try! decoder.decode(Pokemon.self, from: data)
+
     }
 }
 

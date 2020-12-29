@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import RxSwift
 
 public protocol PokemonsUseCaseType {
-    func all(filter: [String: String], completion: @escaping (Result<[Pokemon], Error>) -> Void)
-    func get(by id: Int, completion: @escaping (Result<Pokemon, Error>) -> Void)
+    func all(filter: [String: String]) -> Observable<[Pokemon]>
+    func get(by id: Int) -> Observable<Pokemon>
+    func image(for url: String) -> Observable<Image>
 }
