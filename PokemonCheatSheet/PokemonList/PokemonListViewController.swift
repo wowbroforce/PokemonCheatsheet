@@ -9,11 +9,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class PokemonListViewController: UIViewController {
+final class PokemonListViewController: BaseViewController {
     private let tableView = UITableView()
-    private let viewModel: PokemonListViewModel
+    private let viewModel: PokemonListViewModelType
     
-    init(viewModel: PokemonListViewModel) {
+    init(viewModel: PokemonListViewModelType) {
         self.viewModel = viewModel
 
         super.init(nibName: nil, bundle: nil)
@@ -25,9 +25,14 @@ final class PokemonListViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        viewModel.fetch()
+    }
+    
     private func configureUI() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .white
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
@@ -35,5 +40,11 @@ final class PokemonListViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+}
+
+extension PokemonListViewController: ViewUpdatable {
+    func update() {
+        tableView.reloadData()
     }
 }
