@@ -17,6 +17,9 @@ public final class UseCaseProvider: UseCaseProviderType {
 
     public func makePokemonsUseCase() -> PokemonsUseCaseType {
         let api = apiProvider.makePokemonsAPI()
-        return PokemonsUseCase(api: api)
+        return PokemonsUseCase(
+            api: api,
+            cache: Cache(path: "pokemon")
+        )
     }
 }
