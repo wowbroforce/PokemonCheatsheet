@@ -11,14 +11,14 @@ import RxSwift
 import RxCocoa
 
 final class PokemonDetailsViewModel: ViewModelType {
-    private let pokemon: Pokemon
+    private let item: PokemonListItem
     private let pokemonsUseCase: PokemonsUseCaseType
     private let activityIndicator = ActivityIndicator()
     private let errorTracker = ErrorTracker()
     private let router: PokemonDetailsRouter
 
-    init(pokemon: Pokemon, pokemonsUseCase: PokemonsUseCaseType, router: PokemonDetailsRouter) {
-        self.pokemon = pokemon
+    init(item: PokemonListItem, pokemonsUseCase: PokemonsUseCaseType, router: PokemonDetailsRouter) {
+        self.item = item
         self.pokemonsUseCase = pokemonsUseCase
         self.router = router
     }
@@ -27,7 +27,7 @@ final class PokemonDetailsViewModel: ViewModelType {
         let pokemon = input.fetch
             .flatMapLatest {
                 self.pokemonsUseCase
-                    .get(by: self.pokemon.id)
+                    .get(by: self.item.name)
                     .trackActivity(self.activityIndicator)
                     .trackError(self.errorTracker)
                     .asDriverOnErrorJustComplete()
@@ -57,18 +57,7 @@ final class PokemonDetailsViewModel: ViewModelType {
     }
     
     private func loadSprites(for pokemon: Pokemon) -> Driver<[Image]> {
-        let images = pokemon
-            .sprites
-            .all
-            .map { url in
-                self.pokemonsUseCase
-                    .image(for: url)
-                    .trackActivity(self.activityIndicator)
-                    .trackError(self.errorTracker)
-                    .asDriverOnErrorJustComplete()
-            }
-            
-        return Driver.combineLatest(images)
+        pokemonsUseCase.images(for: pokemon).asDriverOnErrorJustComplete()
     }
 
     struct Input {

@@ -42,7 +42,7 @@ final class PokemonListViewCell: UITableViewCell {
     
     func bind(with viewModel: PokemonListViewCellViewModel) {
         viewModel.image.drive(pokemonImageView.rx.image).disposed(by: bag)
-        pokemonNameLabel.text = viewModel.pokemon.name.capitalized
+        pokemonNameLabel.text = viewModel.item.name.capitalized
     }
     
     private func configureUI() {

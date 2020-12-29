@@ -11,19 +11,24 @@ import RxCocoa
 import RxSwift
 
 final class PokemonListViewCellViewModel {
-    let pokemon: Pokemon
+    let item: PokemonListItem
     let image: Driver<Image>
     
     private let bag = DisposeBag()
     
-    init(pokemon: Pokemon, pokemonsUseCase: PokemonsUseCaseType) {
-        self.pokemon = pokemon
-        
-        guard let url = pokemon.sprites.all.first else {
-            image = .empty()
-            return
-        }
-        
-        image = pokemonsUseCase.image(for: url).asDriverOnErrorJustComplete()
+    init(
+        item: PokemonListItem,
+        pokemonsUseCase: PokemonsUseCaseType,
+        placeholderImage: Image
+    ) {
+        self.item = item
+
+        image = pokemonsUseCase
+            .get(by: item.name)
+            .flatMapLatest {
+                pokemonsUseCase.image(for: $0)
+            }
+            .asDriverOnErrorJustComplete()
+            .map { $0 ?? placeholderImage }
     }
 }

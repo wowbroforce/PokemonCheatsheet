@@ -23,23 +23,25 @@ final class PokemonListViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let pokemons = input.fetch
             .flatMapLatest {
-                self.pokemonsUseCase.all(filter: [:])
+                self.pokemonsUseCase.all()
+                    .debug(" - > list")
                     .trackActivity(self.activityIndicator)
                     .trackError(self.errorTracker)
                     .asDriverOnErrorJustComplete()
             }
-            .map { pokemons in
-                pokemons.map {
+            .map { list in
+                list.results.map {
                     PokemonListViewCellViewModel(
-                        pokemon: $0,
-                        pokemonsUseCase: self.pokemonsUseCase
+                        item: $0,
+                        pokemonsUseCase: self.pokemonsUseCase,
+                        placeholderImage: Image()
                     )
                 }
             }
         
         let navigation = input.selected
             .withLatestFrom(pokemons) { indexPath, pokemons in
-                pokemons[indexPath.row].pokemon
+                pokemons[indexPath.row].item
             }
             .do(onNext: router.toDetails)
             .mapToVoid()

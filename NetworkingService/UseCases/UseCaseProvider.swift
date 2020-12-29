@@ -9,11 +9,14 @@ import Foundation
 import Domain
 
 public final class UseCaseProvider: UseCaseProviderType {
+    private let apiProvider: APIProvider
+    
     public init() {
-        
+        apiProvider = APIProvider()
     }
 
     public func makePokemonsUseCase() -> PokemonsUseCaseType {
-        PokemonsUseCase()
+        let api = apiProvider.makePokemonsAPI()
+        return PokemonsUseCase(api: api)
     }
 }

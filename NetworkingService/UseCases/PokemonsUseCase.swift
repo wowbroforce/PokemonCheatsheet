@@ -10,33 +10,33 @@ import Domain
 import RxSwift
 
 final class PokemonsUseCase: PokemonsUseCaseType {
-    func all(filter: [String : String]) -> Observable<[Pokemon]> {
-        let result = (1...5).map(stub)
-        return Observable.create { observer in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                observer.onNext(result)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
+    private let api: PokemonsAPI
+    
+    init(api: PokemonsAPI) {
+        self.api = api
     }
     
-    func get(by id: Int) -> Observable<Pokemon> {
-        let result = stub(0)
-        return Observable.create { observer in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                observer.onNext(result)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
+    func all() -> Observable<List<PokemonListItem>> {
+        let items = api.all()
+        return items
     }
     
-    func image(for url: String) -> Observable<Image> {
-        return .just(Image(named: "image", in: Bundle(for: type(of:self)), compatibleWith: nil)!)
+    func get(by name: String) -> Observable<Pokemon> {
+        let item = api.get(by: name)
+        return item
     }
     
-    private func stub(_ int: Int) -> Pokemon {
+    func image(for pokemon: Pokemon) -> Observable<Image?> {
+        let image = api.image(for: pokemon)
+        return image
+    }
+    
+    func images(for pokemon: Pokemon) -> Observable<[Image]> {
+        let images = api.images(for: pokemon)
+        return images
+    }
+    
+    private func stub(_ string: String) -> Pokemon {
         let decoder = JSONDecoder()
         let data = string.data(using: .utf8)!
         return try! decoder.decode(Pokemon.self, from: data)

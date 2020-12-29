@@ -28,11 +28,11 @@ class PokemonListRouter {
         navigationController.viewControllers = [controller]
     }
     
-    func toDetails(of pokemon: Pokemon) {
+    func toDetails(of item: PokemonListItem) {
         let pokemonsUseCase = pokemonsUseCaseProivider.makePokemonsUseCase()
         let router = PokemonDetailsRouter(navigationController: navigationController)
         let viewModel = PokemonDetailsViewModel(
-            pokemon: pokemon,
+            item: item,
             pokemonsUseCase: pokemonsUseCase,
             router: router
         )
