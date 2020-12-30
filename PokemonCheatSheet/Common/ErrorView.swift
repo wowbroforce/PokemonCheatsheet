@@ -19,7 +19,7 @@ final class ErrorView: UIView {
     init() {
         super.init(frame: .zero)
         
-        backgroundColor = .red
+        backgroundColor = Colors.systemRed
         
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0

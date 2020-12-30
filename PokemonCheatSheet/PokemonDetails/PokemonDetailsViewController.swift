@@ -146,7 +146,7 @@ final class PokemonDetailsViewController: BaseViewController {
     private func makeDetailsItemUI(key: String, value: String, size: CGFloat = 15) -> UIView {
         let valueLabel = UILabel()
         valueLabel.font = .boldSystemFont(ofSize: size)
-        valueLabel.textColor = .black
+        valueLabel.textColor = Colors.label
         valueLabel.text = value
         valueLabel.textAlignment = .center
         valueLabel.setContentHuggingPriority(.init(rawValue: 100), for: .vertical)
@@ -185,7 +185,7 @@ final class PokemonDetailsViewController: BaseViewController {
     private func makeStatsItemUI(key: String, value: String) -> UIView {
         let titleLabel = UILabel()
         titleLabel.font = .systemFont(ofSize: 17)
-        titleLabel.textColor = .black
+        titleLabel.textColor = Colors.label
         titleLabel.text = key
         titleLabel.textAlignment = .center
         

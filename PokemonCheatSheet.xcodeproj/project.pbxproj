@@ -69,6 +69,7 @@
 		2E18D415259BE65300A391A9 /* Pokemon+Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E18D414259BE65300A391A9 /* Pokemon+Cacheable.swift */; };
 		2E18D41C259C5ADE00A391A9 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E18D41B259C5ADE00A391A9 /* String+Extensions.swift */; };
 		2E1D28A8259C8D4E00C01243 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D28A7259C8D4E00C01243 /* ErrorView.swift */; };
+		2E1D28C8259C9EED00C01243 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D28C7259C9EED00C01243 /* Colors.swift */; };
 		2ED5EC57259C6AFC0051685E /* Separator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED5EC56259C6AFC0051685E /* Separator.swift */; };
 		32D97159FA95ECF05ED55CEB /* Pods_NetworkingService_NetworkingServiceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35AF33BD1D2AAFE9515CBB88 /* Pods_NetworkingService_NetworkingServiceTests.framework */; };
 		53A301245E5E556A12D35417 /* Pods_Domain_DomainTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 802F7C69D75723C1063B0C3C /* Pods_Domain_DomainTests.framework */; };
@@ -240,6 +241,7 @@
 		2E18D414259BE65300A391A9 /* Pokemon+Cacheable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pokemon+Cacheable.swift"; sourceTree = "<group>"; };
 		2E18D41B259C5ADE00A391A9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		2E1D28A7259C8D4E00C01243 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		2E1D28C7259C9EED00C01243 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		2ED5EC56259C6AFC0051685E /* Separator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Separator.swift; sourceTree = "<group>"; };
 		301A0970AC5109101FA350CB /* Pods-PokemonCheatSheet-PokemonCheatSheetUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PokemonCheatSheet-PokemonCheatSheetUITests.release.xcconfig"; path = "Target Support Files/Pods-PokemonCheatSheet-PokemonCheatSheetUITests/Pods-PokemonCheatSheet-PokemonCheatSheetUITests.release.xcconfig"; sourceTree = "<group>"; };
 		35AF33BD1D2AAFE9515CBB88 /* Pods_NetworkingService_NetworkingServiceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetworkingService_NetworkingServiceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -491,6 +493,7 @@
 				2E18D344259B665800A391A9 /* CellReusable.swift */,
 				2ED5EC56259C6AFC0051685E /* Separator.swift */,
 				2E1D28A7259C8D4E00C01243 /* ErrorView.swift */,
+				2E1D28C7259C9EED00C01243 /* Colors.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1127,6 +1130,7 @@
 				2E18D19A259B2A5D00A391A9 /* ViewController.swift in Sources */,
 				2E18D388259B7C7300A391A9 /* PokemonDetailsViewController.swift in Sources */,
 				2E18D33E259B626200A391A9 /* ErrorTracker.swift in Sources */,
+				2E1D28C8259C9EED00C01243 /* Colors.swift in Sources */,
 				2E18D254259B435200A391A9 /* UIView+Extensions.swift in Sources */,
 				2E1D28A8259C8D4E00C01243 /* ErrorView.swift in Sources */,
 				2E18D38F259B7D4500A391A9 /* PokemonDetailsViewModel.swift in Sources */,
@@ -1333,7 +1337,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1388,7 +1392,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1406,14 +1410,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9MTDJ5V3VG;
+				DEVELOPMENT_TEAM = 8L2S28N72Y;
 				INFOPLIST_FILE = PokemonCheatSheet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wowbroforce.PokemonCheatSheet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wowbroforce.epam.PokemonCheatSheet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1428,14 +1432,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9MTDJ5V3VG;
+				DEVELOPMENT_TEAM = 8L2S28N72Y;
 				INFOPLIST_FILE = PokemonCheatSheet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wowbroforce.PokemonCheatSheet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wowbroforce.epam.PokemonCheatSheet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

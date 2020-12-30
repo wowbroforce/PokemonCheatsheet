@@ -11,7 +11,7 @@ class BaseNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationBar.backgroundColor = .white
+        navigationBar.backgroundColor = Colors.systemBackground
         navigationBar.isTranslucent = false
     }
 }

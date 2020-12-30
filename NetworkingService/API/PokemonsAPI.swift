@@ -9,14 +9,14 @@ import Foundation
 import Domain
 import RxSwift
 
-public final class PokemonsAPI {
+final class PokemonsAPI {
     let service: NetworkingService
     
     init(service: NetworkingService) {
         self.service = service
     }
     
-    public func all(limit: Int? = nil, offset: Int? = nil) -> Observable<List<PokemonListItem>> {
+    func all(limit: Int? = nil, offset: Int? = nil) -> Observable<List<PokemonListItem>> {
         var params: [String: Any] = [:]
         params["limit"] = limit
         params["offset"] = offset
@@ -24,15 +24,15 @@ public final class PokemonsAPI {
         return service.getItems(path: "pokemon", params: params)
     }
     
-    public func get(by name: String) -> Observable<Pokemon> {
+    func get(by name: String) -> Observable<Pokemon> {
         service.getItem(path: "pokemon", name: name)
     }
     
-    public func image(url: String) -> Observable<Image> {
+    func image(url: String) -> Observable<Image> {
         return service.getImage(url: url)
     }
 
-    public func images(for pokemon: Pokemon) -> Observable<[Image]> {
+    func images(for pokemon: Pokemon) -> Observable<[Image]> {
         let images = pokemon
             .sprites
             .all
