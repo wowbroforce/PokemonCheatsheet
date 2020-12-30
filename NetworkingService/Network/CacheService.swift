@@ -14,8 +14,6 @@ protocol Cacheable {
 }
 
 protocol AbstractCache {
-//    associatedtype T
-    
     func save<T: Codable & Cacheable>(object: T) -> Completable
     func save<T: Codable>(object: T) -> Completable
     func save(image: Image, path: String) -> Completable
@@ -44,7 +42,6 @@ final class Cache: AbstractCache {
     func save<T: Codable & Cacheable>(object: T) -> Completable {
         Completable.create { observer in
             guard let root = self.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-//                observer(.error(Errors.notFound))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -53,14 +50,11 @@ final class Cache: AbstractCache {
                 .appendingPathComponent("\(object.cacheIdintifier)")
                 .appendingPathComponent("\(T.self).cache")
 
-            print(" - > save path: \(url)")
-
             do {
                 try self.createFolders(at: url)
                 let data = try self.encoder.encode(object)
                 try data.write(to: url, options: .atomic)
             } catch {
-//                observer(.error(Errors.canNotWrite(error)))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -72,7 +66,6 @@ final class Cache: AbstractCache {
     func save<T: Codable>(object: T) -> Completable {
         Completable.create { observer in
             guard let root = self.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-//                observer(.error(Errors.notFound))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -84,7 +77,6 @@ final class Cache: AbstractCache {
                 let data = try self.encoder.encode(object)
                 try data.write(to: url, options: .atomic)
             } catch {
-//                observer(.error(Errors.canNotWrite(error)))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -136,10 +128,7 @@ final class Cache: AbstractCache {
                 .appendingPathComponent("\(name)")
                 .appendingPathComponent("\(T.self).cache")
             
-            print(" - > fetch path: \(url)")
-            
             guard let data = self.fileManager.contents(atPath: url.path) else {
-//                observer(.error(Errors.notFound))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -149,7 +138,6 @@ final class Cache: AbstractCache {
                 observer(.success(object))
                 observer(.completed)
             } catch {
-//                observer(.error(Errors.canNotRead(error)))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -169,7 +157,6 @@ final class Cache: AbstractCache {
                 .appendingPathComponent("\(T.self).cache")
             
             guard let data = self.fileManager.contents(atPath: url.path) else {
-//                observer(.error(Errors.notFound))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -179,7 +166,6 @@ final class Cache: AbstractCache {
                 observer(.success(object))
                 observer(.completed)
             } catch {
-//                observer(.error(Errors.canNotRead(error)))
                 observer(.completed)
                 return Disposables.create()
             }
@@ -202,8 +188,6 @@ final class Cache: AbstractCache {
             
             let url = root
                 .appendingPathComponent(newPath)
-            
-            print(" - > fetch path: \(url)")
             
             guard let data = self.fileManager.contents(atPath: url.path) else {
                 observer(.completed)
@@ -228,11 +212,5 @@ final class Cache: AbstractCache {
             withIntermediateDirectories: true,
             attributes: nil
         )
-    }
-    
-    enum Errors: Error {
-        case notFound,
-             canNotWrite(Error),
-             canNotRead(Error)
     }
 }

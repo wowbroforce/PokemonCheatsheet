@@ -10,7 +10,6 @@ import Foundation
 public struct PokemonType: Codable {
     public let slot: Int
     public let type: InternalType
-    
 }
 
 public struct InternalType: Codable {

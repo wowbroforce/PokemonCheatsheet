@@ -18,7 +18,10 @@ public struct Sprites: Codable {
     public let backShinyFemale: String?
     
     public var all: [String] {
-        return [frontDefault, backDefault, frontShiny, backShiny, frontFemale, backFemale, frontShinyFemale, backShinyFemale].compactMap { $0 }
+        return [
+            frontDefault, backDefault, frontShiny, backShiny,
+            frontFemale, backFemale, frontShinyFemale, backShinyFemale
+        ].compactMap { $0 }
     }
 
     enum CodingKeys: String, CodingKey {
