@@ -25,10 +25,13 @@ final class PokemonListViewCellViewModel {
 
         image = pokemonsUseCase
             .get(by: item.name)
-            .flatMapLatest {
-                pokemonsUseCase.image(for: $0)
+            .map { $0.sprites.all.first }
+            .flatMapLatest { url -> Observable<Image> in
+                guard let url = url else {
+                    return .just(placeholderImage)
+                }
+                return pokemonsUseCase.image(url: url)
             }
             .asDriverOnErrorJustComplete()
-            .map { $0 ?? placeholderImage }
     }
 }

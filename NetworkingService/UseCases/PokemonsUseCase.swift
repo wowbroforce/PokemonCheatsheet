@@ -47,22 +47,23 @@ final class PokemonsUseCase: PokemonsUseCaseType {
         return cachedItem.concat(item)
     }
     
-    func image(for pokemon: Pokemon) -> Observable<Image?> {
-//        let cachedImage: Observable<Image> = cache.fetch().asObservable()
-        let image = api.image(for: pokemon)
-        return image
-    }
-    
-    func images(for pokemon: Pokemon) -> Observable<[Image]> {
-        let images = api.images(for: pokemon)
-        return images
+    func image(url: String) -> Observable<Image> {
+        let cachedImage = cache.fetchImage(by: url).asObservable()
+        let image = api.image(url: url)
+            .flatMap {
+                self.cache
+                    .save(image: $0, path: url)
+                    .asObservable()
+                    .map(to: Image.self)
+                    .concat(Observable.just($0))
+            }
+        return cachedImage.concat(image)
     }
     
     private func stub(_ string: String) -> Pokemon {
         let decoder = JSONDecoder()
         let data = string.data(using: .utf8)!
         return try! decoder.decode(Pokemon.self, from: data)
-
     }
 }
 

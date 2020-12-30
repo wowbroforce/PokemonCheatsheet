@@ -57,7 +57,10 @@ final class PokemonDetailsViewModel: ViewModelType {
     }
     
     private func loadSprites(for pokemon: Pokemon) -> Driver<[Image]> {
-        pokemonsUseCase.images(for: pokemon).asDriverOnErrorJustComplete()
+        let images = pokemon.sprites.all.map {
+            pokemonsUseCase.image(url: $0).asDriverOnErrorJustComplete()
+        }
+        return Driver.zip(images)
     }
 
     struct Input {

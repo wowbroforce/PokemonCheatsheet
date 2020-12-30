@@ -38,9 +38,15 @@ final class NetworkingService {
             }
     }
     
-    func getImage(url: String) -> Observable<Image?> {
+    func getImage(url: String) -> Observable<Image> {
         self.get(absolutePath: url)
-            .map { Image(data: $0) }
+            .map { data -> Image in
+                guard let image = Image(data: data) else {
+                    throw Errors.invalidImage
+                }
+                return image
+            }
+            
     }
     
     private func get(absolutePath: String) -> Observable<Data> {
@@ -78,7 +84,6 @@ final class NetworkingService {
                 task.cancel()
             }
         }
-
     }
     
     enum Errors: Error {
@@ -86,6 +91,7 @@ final class NetworkingService {
              clientError(Error),
              serverError(URLResponse?),
              emptyData,
-             decoding
+             decoding,
+             invalidImage
     }
 }

@@ -24,10 +24,7 @@ public final class PokemonsAPI {
         service.getItem(path: "pokemon", name: name)
     }
     
-    public func image(for pokemon: Pokemon) -> Observable<Image?> {
-        guard let url = pokemon.sprites.all.first else {
-            return .just(nil)
-        }
+    public func image(url: String) -> Observable<Image> {
         return service.getImage(url: url)
     }
 
