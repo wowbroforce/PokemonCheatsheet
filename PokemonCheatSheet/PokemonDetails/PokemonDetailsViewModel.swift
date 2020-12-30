@@ -70,7 +70,7 @@ final class PokemonDetailsViewModel: ViewModelType {
             errors: errorTracker.asDriver(),
             navigation: back,
             title: title,
-            hideError: hideError.debug(" - > error")
+            hideError: hideError
         )
     }
     
