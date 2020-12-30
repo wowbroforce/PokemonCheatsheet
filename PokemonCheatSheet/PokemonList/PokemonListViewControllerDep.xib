@@ -15,18 +15,15 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Nb-m5-xp1">
-                    <rect key="frame" x="129" y="331" width="42" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Ibu-pJ-4ei">
+                    <rect key="frame" x="185" y="183" width="110" height="200"/>
+                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="6Nb-m5-xp1" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="287" id="DIc-9m-whM"/>
-                <constraint firstItem="6Nb-m5-xp1" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="129" id="ozj-9h-u0k"/>
+                <constraint firstItem="Ibu-pJ-4ei" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="139" id="GTf-OG-mjB"/>
+                <constraint firstItem="Ibu-pJ-4ei" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="185" id="dXN-Z8-yuv"/>
             </constraints>
             <point key="canvasLocation" x="62" y="74"/>
         </view>
