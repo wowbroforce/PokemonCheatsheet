@@ -10,7 +10,9 @@ import Domain
 
 struct PokemonDetailsModel {
     let name: String
+    let weight: Int
+    let height: Int
     let types: [String]
-    let stats: [String]
+    let stats: [(String, String)]
     let images: [Image]
 }

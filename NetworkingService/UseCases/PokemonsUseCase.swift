@@ -22,7 +22,7 @@ final class PokemonsUseCase: PokemonsUseCaseType {
     }
     
     func all() -> Observable<List<PokemonListItem>> {
-        let cachedItems: Observable<List<PokemonListItem>> = cache.fetch().asObservable().debug(" - > fetch cache")
+        let cachedItems: Observable<List<PokemonListItem>> = cache.fetch().asObservable()
         let items = api.all()
             .flatMap {
                 self.cache
@@ -35,7 +35,7 @@ final class PokemonsUseCase: PokemonsUseCaseType {
     }
     
     func get(by name: String) -> Observable<Pokemon> {
-        let cachedItem: Observable<Pokemon> = cache.fetch(by: name).asObservable().debug(" - > fetch cache by name")
+        let cachedItem: Observable<Pokemon> = cache.fetch(by: name).asObservable()
         let item = api.get(by: name)
             .flatMap {
                 self.cache

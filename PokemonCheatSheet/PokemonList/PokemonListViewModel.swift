@@ -24,7 +24,6 @@ final class PokemonListViewModel: ViewModelType {
         let pokemons = input.fetch
             .flatMapLatest {
                 self.pokemonsUseCase.all()
-                    .debug(" - > list")
                     .trackActivity(self.activityIndicator)
                     .trackError(self.errorTracker)
                     .asDriverOnErrorJustComplete()
@@ -50,7 +49,8 @@ final class PokemonListViewModel: ViewModelType {
             fetching: activityIndicator.asDriver(),
             pokemons: pokemons,
             error: errorTracker.asDriver(),
-            navigation: navigation
+            navigation: navigation,
+            navigationTitle: "Pokemons"
         )
     }
 
@@ -64,6 +64,7 @@ final class PokemonListViewModel: ViewModelType {
         let pokemons: Driver<[PokemonListViewCellViewModel]>
         let error: Driver<Error>
         let navigation: Driver<Void>
+        let navigationTitle: String
     }
     
 }

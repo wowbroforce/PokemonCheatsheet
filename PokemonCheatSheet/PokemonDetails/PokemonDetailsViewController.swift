@@ -12,21 +12,68 @@ import RxSwift
 
 // TODO: Create a separate component for the image galery
 final class PokemonDetailsViewController: BaseViewController {
-    private let tableView = UITableView()
+    private let imageView = UIImageView()
     private let stackView = UIStackView()
-    private let nameLabel = UILabel()
-    private let typesLabel = UILabel()
     private let statsLabel = UILabel()
     private let viewModel: PokemonDetailsViewModel
-    private let backButton = UIBarButtonItem(title: "back", style: .plain, target: nil, action: nil)
+    private let backButton = UIBarButtonItem(image: Image(named: "back"), style: .plain, target: nil, action: nil)
     private let bag = DisposeBag()
     private let activityIndicator = UIActivityIndicatorView(style: .gray)
     
+    private var detailsView: UIView? {
+        willSet {
+            guard let view = detailsView else {
+                return
+            }
+            stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        didSet {
+            guard let view = detailsView else {
+                return
+            }
+            stackView.insertArrangedSubview(view, at: 2)
+        }
+    }
+    
+    private var statsView: UIView? {
+        willSet {
+            guard let view = statsView else {
+                return
+            }
+            stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        didSet {
+            guard let view = statsView else {
+                return
+            }
+            stackView.insertArrangedSubview(view, at: 3)
+        }
+    }
+    
+    private var imagesView: UIView? {
+        willSet {
+            guard let view = imagesView else {
+                return
+            }
+            stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        didSet {
+            guard let view = imagesView else {
+                return
+            }
+            stackView.insertArrangedSubview(view, at: 4)
+        }
+    }
+    
     private var details: Binder<PokemonDetailsModel> {
         return Binder(self) { controller, details in
-            controller.nameLabel.text = details.name
-            controller.typesLabel.text = details.types.joined(separator: " ")
-            controller.statsLabel.text = details.stats.joined(separator: "\n")
+            controller.imageView.image = details.images.first
+            controller.detailsView = controller.makeDetailsUI(model: details)
+            controller.statsView = controller.makeStatsUI(model: details)
+            controller.imagesView = controller.makeImagesUI(model: details)
         }
     }
 
@@ -47,8 +94,8 @@ final class PokemonDetailsViewController: BaseViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32),
+            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32),
             stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
@@ -56,16 +103,16 @@ final class PokemonDetailsViewController: BaseViewController {
         stackView.axis = .vertical
         stackView.spacing = 8
         stackView.addArrangedSubview(activityIndicator)
-        stackView.addArrangedSubview(nameLabel)
-        stackView.addArrangedSubview(typesLabel)
+        stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(statsLabel)
         
         stackView.addArrangedSubview(UIView())
         
         navigationItem.leftBarButtonItem = backButton
         
-        typesLabel.numberOfLines = 0
         statsLabel.numberOfLines = 0
+                
+        imageView.contentMode = .scaleAspectFit
     }
     
     private func configureBindings() {
@@ -84,8 +131,120 @@ final class PokemonDetailsViewController: BaseViewController {
         output.details.drive(details).disposed(by: bag)
         output.navigation.drive().disposed(by: bag)
         output.fetching.drive(activityIndicator.rx.isAnimating).disposed(by: bag)
+        output.title.drive(navigationItem.rx.title).disposed(by: bag)
     }
-}
+    
+    private func makeDetailsItemUI(key: String, value: String, size: CGFloat = 15) -> UIView {
+        let valueLabel = UILabel()
+        valueLabel.font = .boldSystemFont(ofSize: size)
+        valueLabel.textColor = .black
+        valueLabel.text = value
+        valueLabel.textAlignment = .center
+        valueLabel.setContentHuggingPriority(.init(rawValue: 100), for: .vertical)
+        
+        let titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 12)
+        titleLabel.textColor = .gray
+        titleLabel.text = key
+        titleLabel.textAlignment = .center
+        
+        let stackView = UIStackView(arrangedSubviews: [valueLabel, titleLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        
+        return stackView
+    }
+    
+    private func makeDetailsUI(model: PokemonDetailsModel) -> UIView {
+        let weightView = makeDetailsItemUI(key: "Weight", value: "\(model.weight) hg")
+        let heightView = makeDetailsItemUI(key: "Height", value: "\(model.height) dm")
+        let typeViews = model.types.map {
+            makeDetailsItemUI(key: $0, value: $0.emojified, size: 24)
+        }
+        let views = [weightView, HorizontalSeparator()] +
+            typeViews +
+            [HorizontalSeparator(), heightView]
+        let stackView = UIStackView(arrangedSubviews: views)
+        
+        stackView.axis = .horizontal
+        stackView.spacing = 4
+        stackView.distribution = .equalCentering
+        
+        return stackView
+    }
+    
+    private func makeStatsItemUI(key: String, value: String) -> UIView {
+        let titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 17)
+        titleLabel.textColor = .black
+        titleLabel.text = key
+        titleLabel.textAlignment = .center
+        
+        let valueLabel = UILabel()
+        valueLabel.font = .boldSystemFont(ofSize: 17)
+        valueLabel.textColor = #colorLiteral(red: 0, green: 0.4745098039, blue: 0.1725490196, alpha: 1)
+        valueLabel.text = value
+        valueLabel.textAlignment = .center
+        
+        let separator = UIView()
+        separator.heightAnchor.constraint(equalToConstant: 36).isActive = true
 
-extension Reactive where Base: PokemonDetailsViewController {
+        let stackView = UIStackView(
+            arrangedSubviews: [titleLabel, separator, valueLabel]
+        )
+        stackView.axis = .horizontal
+        stackView.spacing = 4
+        
+        return stackView
+    }
+    
+    private func makeStatsUI(model: PokemonDetailsModel) -> UIView {
+        let titleLabel = UILabel()
+        titleLabel.text = "Stats"
+        titleLabel.font = .boldSystemFont(ofSize: 17)
+        titleLabel.textAlignment = .center
+        titleLabel.heightAnchor.constraint(equalToConstant: 54).isActive = true
+        
+        let statViews = model.stats.map { key, value in
+            makeStatsItemUI(key: key, value: value)
+        }
+        
+        let stackView = UIStackView(
+            arrangedSubviews: [titleLabel, VerticalSeparator()] + statViews
+        )
+        stackView.axis = .vertical
+        
+        return stackView
+    }
+    
+    private func makeImagesUI(model: PokemonDetailsModel) -> UIView {
+        let titleLabel = UILabel()
+        titleLabel.text = "Other Images"
+        titleLabel.font = .boldSystemFont(ofSize: 17)
+        titleLabel.textAlignment = .center
+        titleLabel.heightAnchor.constraint(equalToConstant: 54).isActive = true
+        
+        let imageViews = model.images.map { image -> UIImageView in
+            let imageView = UIImageView(image: image)
+            imageView.contentMode = .scaleAspectFit
+            return imageView
+        }
+        
+        let scrollView = UIScrollView()
+        let stackView = UIStackView(arrangedSubviews: imageViews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        scrollView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: stackView.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+            scrollView.heightAnchor.constraint(equalToConstant: 96)
+        ])
+        
+        let outerStackView = UIStackView(arrangedSubviews: [titleLabel, VerticalSeparator(), scrollView])
+        outerStackView.axis = .vertical
+        return outerStackView
+    }
 }

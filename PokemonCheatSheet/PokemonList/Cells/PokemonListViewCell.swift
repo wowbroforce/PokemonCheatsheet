@@ -15,12 +15,6 @@ final class PokemonListViewCell: UITableViewCell {
     
     private var bag = DisposeBag()
     
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        
-//        configureUI()
-//    }
-//    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -46,9 +40,6 @@ final class PokemonListViewCell: UITableViewCell {
     }
     
     private func configureUI() {
-//        [pokemonNameLabel, pokemonImageView].forEach {
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//        }
         let stackView = UIStackView(arrangedSubviews: [pokemonNameLabel, UIView(), pokemonImageView])
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -57,18 +48,19 @@ final class PokemonListViewCell: UITableViewCell {
         contentView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            pokemonImageView.widthAnchor.constraint(equalToConstant: 92),
-            pokemonImageView.heightAnchor.constraint(equalToConstant: 92)
+            pokemonImageView.widthAnchor.constraint(equalTo: pokemonImageView.heightAnchor)
         ])
         
         pokemonImageView.layer.cornerRadius = 16
         pokemonImageView.layer.masksToBounds = true
+        
+        pokemonNameLabel.font = UIFont.boldSystemFont(ofSize: 17)
     }
 }

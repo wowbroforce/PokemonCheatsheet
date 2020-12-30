@@ -10,3 +10,4 @@ TODO:
 - caching
 - check the app for retain cycles
 - remove comments, todos, etc.
+- propper error handling

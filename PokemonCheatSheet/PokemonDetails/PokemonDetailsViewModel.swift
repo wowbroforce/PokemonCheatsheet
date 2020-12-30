@@ -40,19 +40,29 @@ final class PokemonDetailsViewModel: ViewModelType {
         let details = Driver.combineLatest(pokemon, images) { pokemon, images in
             PokemonDetailsModel(
                 name: pokemon.name.capitalized,
-                types: pokemon.types.map { $0.type.name },
-                stats: pokemon.stats.map { "\($0.stat.name)  - \($0.baseStat)" },
+                weight: pokemon.weight,
+                height: pokemon.height,
+                types: pokemon.types.map { $0.type.name.capitalized },
+                stats: pokemon.stats.map {
+                    ("\($0.stat.name.split(separator: "-").joined(separator: " ").capitalized)", "\($0.baseStat)")
+                },
                 images: images
             )
         }
         
+        let title = pokemon
+            .map { $0.name }
+            .startWith(item.name)
+            .map { $0.capitalized }
+        
         let back = input.back.do(onNext: router.toList)
                 
         return Output(
-            fetching: activityIndicator.asDriver().debug(" - > activity"),
+            fetching: activityIndicator.asDriver(),
             details: details,
             errors: errorTracker.asDriver(),
-            navigation: back
+            navigation: back,
+            title: title
         )
     }
     
@@ -73,5 +83,6 @@ final class PokemonDetailsViewModel: ViewModelType {
         let details: Driver<PokemonDetailsModel>
         let errors: Driver<Error>
         let navigation: Driver<Void>
+        let title: Driver<String>
     }
 }

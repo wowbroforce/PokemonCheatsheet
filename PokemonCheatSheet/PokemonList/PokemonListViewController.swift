@@ -42,8 +42,8 @@ final class PokemonListViewController: BaseViewController {
         ])
         
         tableView.refreshControl = refreshControl
-        tableView.estimatedRowHeight = 64
-        tableView.rowHeight = UITableView.automaticDimension
+//        tableView.estimatedRowHeight = 108
+        tableView.rowHeight = 108//UITableView.automaticDimension
         tableView.register(PokemonListViewCell.self, forCellReuseIdentifier: PokemonListViewCell.reuseIdentifier)
         
         stackView.addArrangedSubview(tableView)
@@ -81,6 +81,8 @@ final class PokemonListViewController: BaseViewController {
             .disposed(by: bag)
         output.navigation.drive().disposed(by: bag)
         output.fetching.drive(refreshControl.rx.isRefreshing).disposed(by: bag)
+        
+        navigationItem.title = output.navigationTitle
     }
 }
 

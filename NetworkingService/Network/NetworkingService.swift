@@ -21,7 +21,7 @@ final class NetworkingService {
     }
     
     func getItems<Model: Codable>(path: String) -> Observable<List<Model>> {
-        let absolutePath = "\(endpoint)/\(path)?limit=20"
+        let absolutePath = "\(endpoint)/\(path)"
         return self
             .get(absolutePath: absolutePath)
             .map {

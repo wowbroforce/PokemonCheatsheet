@@ -12,5 +12,6 @@ class BaseNavigationController: UINavigationController {
         super.viewDidLoad()
         
         navigationBar.backgroundColor = .white
+        navigationBar.isTranslucent = false
     }
 }
