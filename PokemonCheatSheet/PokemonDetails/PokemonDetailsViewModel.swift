@@ -57,18 +57,29 @@ final class PokemonDetailsViewModel: ViewModelType {
         
         let back = input.back.do(onNext: router.toList)
                 
+        let error = errorTracker.asDriver()
+        
+        let hideError = Driver.merge([
+            details.map { _ in true },
+            error.map { _ in false }
+        ])
+
         return Output(
             fetching: activityIndicator.asDriver(),
             details: details,
             errors: errorTracker.asDriver(),
             navigation: back,
-            title: title
+            title: title,
+            hideError: hideError.debug(" - > error")
         )
     }
     
     private func loadSprites(for pokemon: Pokemon) -> Driver<[Image]> {
         let images = pokemon.sprites.all.map {
-            pokemonsUseCase.image(url: $0).asDriverOnErrorJustComplete()
+            pokemonsUseCase.image(url: $0)
+                .trackError(errorTracker)
+                .trackActivity(activityIndicator)
+                .asDriverOnErrorJustComplete()
         }
         return Driver.zip(images)
     }
@@ -84,5 +95,6 @@ final class PokemonDetailsViewModel: ViewModelType {
         let errors: Driver<Error>
         let navigation: Driver<Void>
         let title: Driver<String>
+        let hideError: Driver<Bool>
     }
 }

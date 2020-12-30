@@ -15,6 +15,7 @@ final class PokemonListViewController: BaseViewController {
     private let bag = DisposeBag()
     private let refreshControl = UIRefreshControl()
     private let stackView = UIStackView()
+    private let errorView = ErrorView()
     
     init(viewModel: PokemonListViewModel) {
         self.viewModel = viewModel
@@ -46,6 +47,8 @@ final class PokemonListViewController: BaseViewController {
         tableView.register(PokemonListViewCell.self, forCellReuseIdentifier: PokemonListViewCell.reuseIdentifier)
         
         stackView.addArrangedSubview(tableView)
+        
+        stackView.addArrangedSubview(errorView)
     }
     
     private func configureBindings() {
@@ -80,6 +83,8 @@ final class PokemonListViewController: BaseViewController {
             .disposed(by: bag)
         output.navigation.drive().disposed(by: bag)
         output.fetching.drive(refreshControl.rx.isRefreshing).disposed(by: bag)
+
+        output.hideError.drive(errorView.rx.isHidden).disposed(by: bag)
         
         navigationItem.title = output.navigationTitle
     }

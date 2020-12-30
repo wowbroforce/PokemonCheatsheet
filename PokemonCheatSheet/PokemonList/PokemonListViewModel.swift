@@ -47,12 +47,20 @@ final class PokemonListViewModel: ViewModelType {
             .do(onNext: router.toDetails)
             .mapToVoid()
         
+        let error = errorTracker.asDriver()
+        
+        let hideError = Driver.merge([
+            viewModels.map { _ in true },
+            error.map { _ in false }
+        ])
+        
         return Output(
             fetching: activityIndicator.asDriver(),
             pokemons: viewModels,
-            error: errorTracker.asDriver(),
+            error: error,
             navigation: navigation,
-            navigationTitle: "Pokemons"
+            navigationTitle: "Pokemons",
+            hideError: hideError
         )
     }
 
@@ -67,6 +75,7 @@ final class PokemonListViewModel: ViewModelType {
         let error: Driver<Error>
         let navigation: Driver<Void>
         let navigationTitle: String
+        let hideError: Driver<Bool>
     }
     
 }

@@ -18,6 +18,7 @@ final class PokemonDetailsViewController: BaseViewController {
     private let backButton = UIBarButtonItem(image: Image(named: "back"), style: .plain, target: nil, action: nil)
     private let bag = DisposeBag()
     private let activityIndicator = UIActivityIndicatorView(style: .gray)
+    private let errorView = ErrorView()
     
     private var detailsView: UIView? {
         willSet {
@@ -112,6 +113,14 @@ final class PokemonDetailsViewController: BaseViewController {
         statsLabel.numberOfLines = 0
                 
         imageView.contentMode = .scaleAspectFit
+        
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(errorView)
+        NSLayoutConstraint.activate([
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            errorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     private func configureBindings() {
@@ -131,6 +140,7 @@ final class PokemonDetailsViewController: BaseViewController {
         output.navigation.drive().disposed(by: bag)
         output.fetching.drive(activityIndicator.rx.isAnimating).disposed(by: bag)
         output.title.drive(navigationItem.rx.title).disposed(by: bag)
+        output.hideError.drive(errorView.rx.isHidden).disposed(by: bag)
     }
     
     private func makeDetailsItemUI(key: String, value: String, size: CGFloat = 15) -> UIView {
