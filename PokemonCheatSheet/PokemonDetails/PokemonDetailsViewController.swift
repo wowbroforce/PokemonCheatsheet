@@ -128,6 +128,7 @@ final class PokemonDetailsViewController: BaseViewController {
                 
         imageView.contentMode = .scaleAspectFit
         
+        errorView.isHidden = true
         errorView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(errorView)
         NSLayoutConstraint.activate([

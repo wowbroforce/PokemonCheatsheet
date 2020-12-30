@@ -49,6 +49,8 @@ final class PokemonListViewController: BaseViewController {
         stackView.addArrangedSubview(tableView)
         
         stackView.addArrangedSubview(errorView)
+
+        errorView.isHidden = true
     }
     
     private func configureBindings() {

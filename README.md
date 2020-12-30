@@ -10,8 +10,6 @@
 8. [x] Publish code on a github public repository, or in a zip archive
 9. [x] Create a README.md file collecting your implementation choices motivations
 
-I didn't have the opportunity to test the application on iOS 11 for technical reasons.
-
 # Motivations
 
 My main motivation is a limited amount of time. I use tools and frameworks I'm most familiar with to speed up the development.  
