@@ -10,7 +10,6 @@ import Domain
 import RxCocoa
 import RxSwift
 
-// TODO: Create a separate component for the image galery
 final class PokemonDetailsViewController: BaseViewController {
     private let imageView = UIImageView()
     private let stackView = UIStackView()

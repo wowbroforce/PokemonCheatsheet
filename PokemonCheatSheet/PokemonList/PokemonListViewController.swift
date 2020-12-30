@@ -42,8 +42,7 @@ final class PokemonListViewController: BaseViewController {
         ])
         
         tableView.refreshControl = refreshControl
-//        tableView.estimatedRowHeight = 108
-        tableView.rowHeight = 108//UITableView.automaticDimension
+        tableView.rowHeight = 108
         tableView.register(PokemonListViewCell.self, forCellReuseIdentifier: PokemonListViewCell.reuseIdentifier)
         
         stackView.addArrangedSubview(tableView)
@@ -89,5 +88,11 @@ final class PokemonListViewController: BaseViewController {
 extension PokemonListViewController: ViewUpdatable {
     func update() {
         tableView.reloadData()
+    }
+}
+
+extension UIScrollView {
+    func  isNearBottomEdge(edgeOffset: CGFloat = 20.0) -> Bool {
+        self.contentOffset.y + self.frame.size.height + edgeOffset > self.contentSize.height
     }
 }

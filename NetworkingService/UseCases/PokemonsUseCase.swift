@@ -21,9 +21,9 @@ final class PokemonsUseCase: PokemonsUseCaseType {
         self.cache = cache
     }
     
-    func all() -> Observable<List<PokemonListItem>> {
+    func all(limit: Int? = nil, offset: Int? = nil) -> Observable<List<PokemonListItem>> {
         let cachedItems: Observable<List<PokemonListItem>> = cache.fetch().asObservable()
-        let items = api.all()
+        let items = api.all(limit: limit, offset: offset)
             .flatMap {
                 self.cache
                     .save(object: $0)
@@ -59,11 +59,22 @@ final class PokemonsUseCase: PokemonsUseCaseType {
             }
         return cachedImage.concat(image)
     }
+
+    func next(url: String) -> Observable<List<PokemonListItem>> {
+        guard
+            let url = URL(string: url),
+            let params = url.queryParameters,
+            let limit = Int(params["limit"] ?? ""),
+            let offset = Int(params["offset"] ?? "")
+        else {
+            return .error(Errors.cantGetQueryParameters)
+        }
+        
+        return all(limit: limit, offset: offset)
+    }
     
-    private func stub(_ string: String) -> Pokemon {
-        let decoder = JSONDecoder()
-        let data = string.data(using: .utf8)!
-        return try! decoder.decode(Pokemon.self, from: data)
+    enum Errors: Error {
+        case cantGetQueryParameters
     }
 }
 
@@ -72,6 +83,17 @@ extension ObservableType where Element == Never {
     func map<T>(to: T.Type) -> Observable<T> {
         return self.flatMap { _ in
             return Observable<T>.error(MapFromNever())
+        }
+    }
+}
+
+extension URL {
+    public var queryParameters: [String: String]? {
+        guard
+            let components = URLComponents(url: self, resolvingAgainstBaseURL: true),
+            let queryItems = components.queryItems else { return nil }
+        return queryItems.reduce(into: [String: String]()) { (result, item) in
+            result[item.name] = item.value
         }
     }
 }

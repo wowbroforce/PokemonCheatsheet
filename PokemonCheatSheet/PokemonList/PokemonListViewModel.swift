@@ -23,11 +23,13 @@ final class PokemonListViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let pokemons = input.fetch
             .flatMapLatest {
-                self.pokemonsUseCase.all()
+                self.pokemonsUseCase.all(limit: 2000, offset: nil)
                     .trackActivity(self.activityIndicator)
                     .trackError(self.errorTracker)
                     .asDriverOnErrorJustComplete()
             }
+            
+        let viewModels = pokemons
             .map { list in
                 list.results.map {
                     PokemonListViewCellViewModel(
@@ -39,7 +41,7 @@ final class PokemonListViewModel: ViewModelType {
             }
         
         let navigation = input.selected
-            .withLatestFrom(pokemons) { indexPath, pokemons in
+            .withLatestFrom(viewModels) { indexPath, pokemons in
                 pokemons[indexPath.row].item
             }
             .do(onNext: router.toDetails)
@@ -47,7 +49,7 @@ final class PokemonListViewModel: ViewModelType {
         
         return Output(
             fetching: activityIndicator.asDriver(),
-            pokemons: pokemons,
+            pokemons: viewModels,
             error: errorTracker.asDriver(),
             navigation: navigation,
             navigationTitle: "Pokemons"

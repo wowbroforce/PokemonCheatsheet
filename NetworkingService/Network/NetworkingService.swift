@@ -20,8 +20,9 @@ final class NetworkingService {
         self.session = session
     }
     
-    func getItems<Model: Codable>(path: String) -> Observable<List<Model>> {
-        let absolutePath = "\(endpoint)/\(path)"
+    func getItems<Model: Codable>(path: String, params: [String: Any]) -> Observable<List<Model>> {
+        let query = params.map { key, value in "\(key)=\(value)"}.joined(separator: "&")
+        let absolutePath = "\(endpoint)/\(path)?\(query)"
         return self
             .get(absolutePath: absolutePath)
             .map {

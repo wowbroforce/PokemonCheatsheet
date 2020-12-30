@@ -9,7 +9,8 @@ import Foundation
 import RxSwift
 
 public protocol PokemonsUseCaseType {
-    func all() -> Observable<List<PokemonListItem>>
+    func all(limit: Int?, offset: Int?) -> Observable<List<PokemonListItem>>
     func get(by name: String) -> Observable<Pokemon>
     func image(url: String) -> Observable<Image>
+    func next(url: String) -> Observable<List<PokemonListItem>>
 }

@@ -16,8 +16,12 @@ public final class PokemonsAPI {
         self.service = service
     }
     
-    public func all() -> Observable<List<PokemonListItem>> {
-        service.getItems(path: "pokemon")
+    public func all(limit: Int? = nil, offset: Int? = nil) -> Observable<List<PokemonListItem>> {
+        var params: [String: Any] = [:]
+        params["limit"] = limit
+        params["offset"] = offset
+
+        return service.getItems(path: "pokemon", params: params)
     }
     
     public func get(by name: String) -> Observable<Pokemon> {

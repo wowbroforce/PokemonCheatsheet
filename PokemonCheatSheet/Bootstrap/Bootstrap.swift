@@ -14,17 +14,9 @@ final class Bootstrap {
     private init() { }
     
     func configureMainInterface(in window: UIWindow) {
-        configureDefaultAppearance()
-        
         let navigationController = BaseNavigationController()
         let router = PokemonListRouter(navigationController: navigationController)
         window.rootViewController = navigationController
         router.toList()
-    }
-    
-    private func configureDefaultAppearance() {
-//        UINavigationBar.appearance().isTranslucent = false
-//        UITableView.appearance().backgroundColor = .white
-//        UIView.appearance(whenContainedInInstancesOf: [UIViewController.self]).backgroundColor = .green
     }
 }
