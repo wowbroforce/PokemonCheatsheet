@@ -13,3 +13,23 @@ public struct List<Model: Codable>: Codable {
     public let previous: String?
     public let results: [Model]
 }
+
+public extension List {
+    static var empty: Self {
+        List(
+            count: 0,
+            next: nil,
+            previous: nil,
+            results: []
+        )
+    }
+    
+    func merged(with list: Self) -> Self {
+        List(
+            count: list.count,
+            next: list.next,
+            previous: nil,
+            results: results + list.results
+        )
+    }
+}

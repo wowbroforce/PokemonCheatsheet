@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Bootstrap.shared.configureMainInterface(in: window)
         
         self.window = window
+        
+        window.makeKeyAndVisible()
+        
         return true
     }
 }

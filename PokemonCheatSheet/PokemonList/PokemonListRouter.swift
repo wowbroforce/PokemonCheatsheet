@@ -20,9 +20,11 @@ class PokemonListRouter {
     
     func toList() {
         let pokemonsUseCase = pokemonsUseCaseProivider.makePokemonsUseCase()
+        let fetcher = PaginatedFetcher(limit: 50, useCase: pokemonsUseCase).toAny()
         let viewModel = PokemonListViewModel(
             pokemonsUseCase: pokemonsUseCase,
-            router: self
+            router: self,
+            fetcher: fetcher
         )
         let controller = PokemonListViewController(viewModel: viewModel)
         navigationController.viewControllers = [controller]

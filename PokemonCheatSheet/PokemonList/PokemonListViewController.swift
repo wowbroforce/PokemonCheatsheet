@@ -65,8 +65,18 @@ final class PokemonListViewController: BaseViewController {
         
         let selected = tableView.rx.itemSelected.asDriver()
         
+        let next = tableView.rx.contentOffset
+            .asDriver()
+            .map { _ in
+                self.tableView.isNearBottomEdge()
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .mapToVoid()
+
         let input = PokemonListViewModel.Input(
             fetch: Driver.merge(viewWillAppear, pull),
+            next: next,
             selected: selected
         )
         
@@ -92,14 +102,8 @@ final class PokemonListViewController: BaseViewController {
     }
 }
 
-extension PokemonListViewController: ViewUpdatable {
-    func update() {
-        tableView.reloadData()
-    }
-}
-
 extension UIScrollView {
-    func  isNearBottomEdge(edgeOffset: CGFloat = 20.0) -> Bool {
+    func isNearBottomEdge(edgeOffset: CGFloat = 20.0) -> Bool {
         self.contentOffset.y + self.frame.size.height + edgeOffset > self.contentSize.height
     }
 }

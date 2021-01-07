@@ -11,25 +11,31 @@ import RxSwift
 
 final class PokemonListViewModel: ViewModelType {
     private let pokemonsUseCase: PokemonsUseCaseType
-    private let activityIndicator = ActivityIndicator()
-    private let errorTracker = ErrorTracker()
     private let router: PokemonListRouter
+    private let fetcher: AnyFetcher<PokemonListItem>
     
-    init(pokemonsUseCase: PokemonsUseCaseType, router: PokemonListRouter) {
+    init(
+        pokemonsUseCase: PokemonsUseCaseType,
+        router: PokemonListRouter,
+        fetcher: AnyFetcher<PokemonListItem>
+    ) {
         self.pokemonsUseCase = pokemonsUseCase
         self.router = router
+        self.fetcher = fetcher
     }
     
     func transform(input: Input) -> Output {
-        let pokemons = input.fetch
+        let start = input.fetch
             .flatMapLatest {
-                self.pokemonsUseCase.all(limit: 2000, offset: nil)
-                    .trackActivity(self.activityIndicator)
-                    .trackError(self.errorTracker)
-                    .asDriverOnErrorJustComplete()
+                self.fetcher.start()
+            }
+        
+        let next = input.next
+            .flatMapLatest {
+                self.fetcher.next()
             }
             
-        let viewModels = pokemons
+        let viewModels = fetcher.list()
             .map { list in
                 list.results.map {
                     PokemonListViewCellViewModel(
@@ -47,7 +53,7 @@ final class PokemonListViewModel: ViewModelType {
             .do(onNext: router.toDetails)
             .mapToVoid()
         
-        let error = errorTracker.asDriver()
+        let error = fetcher.errors()
         
         let hideError = Driver.merge([
             viewModels.map { _ in true },
@@ -55,10 +61,10 @@ final class PokemonListViewModel: ViewModelType {
         ])
         
         return Output(
-            fetching: activityIndicator.asDriver(),
+            fetching: fetcher.fetching(),
             pokemons: viewModels,
             error: error,
-            navigation: navigation,
+            navigation: .merge(navigation, start, next),
             navigationTitle: "Pokemons",
             hideError: hideError
         )
@@ -66,6 +72,7 @@ final class PokemonListViewModel: ViewModelType {
 
     struct Input {
         let fetch: Driver<Void>
+        let next: Driver<Void>
         let selected: Driver<IndexPath>
     }
     
@@ -77,5 +84,4 @@ final class PokemonListViewModel: ViewModelType {
         let navigationTitle: String
         let hideError: Driver<Bool>
     }
-    
 }
