@@ -33,12 +33,14 @@ final class PokemonDetailsGalleryView: UITableViewCell {
     }
 
     private func configureUI() {
+        selectionStyle = .none
+
         layout.scrollDirection = .horizontal
         layout.itemSize = .init(width: 96, height: 96)
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = Colors.systemBackground
         collectionView.dataSource = self
-        collectionView.delegate = self
         collectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.reuseIdentifier)
         contentView.addSubview(collectionView)
 
@@ -58,11 +60,10 @@ extension PokemonDetailsGalleryView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.reuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.reuseIdentifier, for: indexPath) as! ImageCollectionViewCell
+        cell.update(with: images[indexPath.item])
+        return cell
     }
-}
-
-extension PokemonDetailsGalleryView: UICollectionViewDelegate {
 }
 
 private final class ImageCollectionViewCell: UICollectionViewCell, CellReusable {
@@ -72,6 +73,8 @@ private final class ImageCollectionViewCell: UICollectionViewCell, CellReusable 
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configureUI()
     }
     
     required init?(coder: NSCoder) {

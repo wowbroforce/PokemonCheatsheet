@@ -57,6 +57,7 @@ final class PokemonListViewController: BaseViewController {
         let viewWillAppear = rx
             .sentMessage(#selector(UIViewController.viewWillAppear(_:)))
             .mapToVoid()
+            .take(1)
             .asDriverOnErrorJustComplete()
         
         let pull = refreshControl.rx

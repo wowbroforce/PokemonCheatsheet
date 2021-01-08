@@ -27,6 +27,8 @@ final class PokemonDetailsSpriteCell: UITableViewCell {
     }
     
     private func configureUI() {
+        selectionStyle = .none
+
         spriteView.contentMode = .scaleAspectFit
         spriteView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(spriteView)

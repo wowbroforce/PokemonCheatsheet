@@ -58,9 +58,6 @@ final class PokemonListViewCell: UITableViewCell {
             pokemonImageView.widthAnchor.constraint(equalTo: pokemonImageView.heightAnchor)
         ])
         
-        pokemonImageView.layer.cornerRadius = 16
-        pokemonImageView.layer.masksToBounds = true
-        
         pokemonNameLabel.font = UIFont.boldSystemFont(ofSize: 17)
     }
 }

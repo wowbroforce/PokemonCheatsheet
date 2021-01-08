@@ -50,6 +50,8 @@ final class PokemonDetailsViewCell: UITableViewCell {
     }
     
     private func configureUI() {
+        selectionStyle = .none
+        
         let stackView = UIStackView(arrangedSubviews: allViews)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +67,7 @@ final class PokemonDetailsViewCell: UITableViewCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
 
-        typeViews.forEach { $0.isHidden = false }
+        typeViews.forEach { $0.isHidden = true }
     }
 }
 

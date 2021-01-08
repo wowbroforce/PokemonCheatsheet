@@ -26,6 +26,8 @@ final class PokemonDetailsHeaderCell: UITableViewCell {
     }
 
     private func configureUI() {
+        selectionStyle = .none
+
         titleLabel.font = .boldSystemFont(ofSize: 17)
         titleLabel.textAlignment = .center
         titleLabel.heightAnchor.constraint(equalToConstant: 54).isActive = true

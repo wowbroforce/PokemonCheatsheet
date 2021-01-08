@@ -28,6 +28,8 @@ final class PokemonDetailsStatView: UITableViewCell {
     }
     
     private func configureUI() {
+        selectionStyle = .none
+
         titleLabel.font = .systemFont(ofSize: 17)
         titleLabel.textColor = Colors.label
         titleLabel.textAlignment = .center

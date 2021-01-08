@@ -37,20 +37,20 @@ final class PokemonDetailsViewModel: ViewModelType {
             .flatMapLatest(loadSprites)
             .startWith([])
         
-        let details = Driver.combineLatest(pokemon, images) { pokemon, images in
-            PokemonDetailsModel(
-                name: pokemon.name.capitalized,
-                weight: pokemon.weight,
-                height: pokemon.height,
-                types: pokemon.types.map { $0.type.name.capitalized },
-                stats: pokemon.stats.map {
-                    ("\($0.stat.name.split(separator: "-").joined(separator: " ").capitalized)", "\($0.baseStat)")
-                },
-                images: images
-            )
-        }
-        
-        let items = details.map(detailsToItems)
+        let items = Driver
+            .combineLatest(pokemon, images) { pokemon, images in
+                PokemonDetailsModel(
+                    name: pokemon.name.capitalized,
+                    weight: pokemon.weight,
+                    height: pokemon.height,
+                    types: pokemon.types.map { $0.type.name.capitalized },
+                    stats: pokemon.stats.map {
+                        ("\($0.stat.name.split(separator: "-").joined(separator: " ").capitalized)", "\($0.baseStat)")
+                    },
+                    images: images
+                )
+            }
+            .map(detailsToItems)
         
         let title = pokemon
             .map { $0.name }
@@ -62,13 +62,12 @@ final class PokemonDetailsViewModel: ViewModelType {
         let error = errorTracker.asDriver()
         
         let hideError = Driver.merge([
-            details.map { _ in true },
+            items.map { _ in true },
             error.map { _ in false }
         ])
 
         return Output(
             fetching: activityIndicator.asDriver(),
-            details: details,
             detailItems: items,
             errors: errorTracker.asDriver(),
             navigation: back,
@@ -109,7 +108,6 @@ final class PokemonDetailsViewModel: ViewModelType {
     
     struct Output {
         let fetching: Driver<Bool>
-        let details: Driver<PokemonDetailsModel>
         let detailItems: Driver<[PokemonDetailsModelItem]>
         let errors: Driver<Error>
         let navigation: Driver<Void>
