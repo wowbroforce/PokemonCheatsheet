@@ -19,10 +19,13 @@ final class PaginatedFetcher: Fetcher {
     private let useCase: PokemonsUseCaseType
     private let relay = BehaviorRelay<List<Element>>(value: .empty)
     private var shouldLoadNextPage = false
+    private var fetchingDisposable: Disposable?
     
     init(limit: Int, useCase: PokemonsUseCaseType) {
         self.limit = limit
         self.useCase = useCase
+        
+        fetchingDisposable = fetching().do(onNext: activityChange).drive()
     }
     
     func start() -> Driver<Void> {
@@ -52,9 +55,7 @@ final class PaginatedFetcher: Fetcher {
     }
     
     func fetching() -> Driver<Bool> {
-        activityIndicator
-            .asDriver()
-            .do(onNext: activityChange)
+        activityIndicator.asDriver()
     }
     
     func errors() -> Driver<Error> {

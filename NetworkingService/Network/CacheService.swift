@@ -15,10 +15,10 @@ protocol Cacheable {
 
 protocol AbstractCache {
     func save<T: Codable & Cacheable>(object: T) -> Completable
-    func save<T: Codable>(object: T) -> Completable
+    func save<T: Codable>(object: T, params: [String: Any]?) -> Completable
     func save(image: Image, path: String) -> Completable
     func fetch<T: Codable>(by id: String) -> Maybe<T>
-    func fetch<T: Codable>() -> Maybe<T>
+    func fetch<T: Codable>(params: [String: Any]?) -> Maybe<T>
     func fetchImage(by path: String) -> Maybe<Image>
 }
 
@@ -63,15 +63,18 @@ final class Cache: AbstractCache {
         }.subscribe(on: scheduler)
     }
     
-    func save<T: Codable>(object: T) -> Completable {
+    func save<T: Codable>(object: T, params: [String: Any]? = nil) -> Completable {
         Completable.create { observer in
             guard let root = self.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
                 observer(.completed)
                 return Disposables.create()
             }
+            let suffix = params.flatMap {
+                $0.count > 0 ? ("?" + $0.map { "\($0)=\($1)" }.joined(separator: "&")) : ""
+            } ?? ""
             let url = root
                 .appendingPathComponent(self.path)
-                .appendingPathComponent("\(T.self).cache")
+                .appendingPathComponent("\(T.self)\(suffix).cache")
             do {
                 try self.createFolders(at: url)
                 let data = try self.encoder.encode(object)
@@ -146,15 +149,18 @@ final class Cache: AbstractCache {
         }.subscribe(on: scheduler)
     }
     
-    func fetch<T: Codable>() -> Maybe<T> {
+    func fetch<T: Codable>(params: [String: Any]?) -> Maybe<T> {
         Maybe.create { observer in
             guard let root = self.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
                 observer(.completed)
                 return Disposables.create()
             }
+            let suffix = params.flatMap {
+                $0.count > 0 ? ("?" + $0.map { "\($0)=\($1)" }.joined(separator: "&")) : ""
+            } ?? ""
             let url = root
                 .appendingPathComponent(self.path)
-                .appendingPathComponent("\(T.self).cache")
+                .appendingPathComponent("\(T.self)\(suffix).cache")
             
             guard let data = self.fileManager.contents(atPath: url.path) else {
                 observer(.completed)

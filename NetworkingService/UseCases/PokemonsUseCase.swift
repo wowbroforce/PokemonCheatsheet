@@ -22,11 +22,12 @@ final class PokemonsUseCase: PokemonsUseCaseType {
     }
     
     func all(limit: Int? = nil, offset: Int? = nil) -> Observable<List<PokemonListItem>> {
-        let cachedItems: Observable<List<PokemonListItem>> = cache.fetch().asObservable()
+        let params = cacheParams(limit: limit, offset: offset)
+        let cachedItems: Observable<List<PokemonListItem>> = cache.fetch(params: params).asObservable()
         let items = api.all(limit: limit, offset: offset)
             .flatMap {
                 self.cache
-                    .save(object: $0)
+                    .save(object: $0, params: params)
                     .asObservable()
                     .map(to: List<PokemonListItem>.self)
                     .concat(Observable.just($0))
@@ -73,6 +74,13 @@ final class PokemonsUseCase: PokemonsUseCaseType {
         return all(limit: limit, offset: offset)
     }
     
+    private func cacheParams(limit: Int?, offset: Int?) -> [String: Any] {
+        var params: [String: Any] = [:]
+        params["offset"] = offset
+        params["limit"] = limit
+        return params
+    }
+        
     enum Errors: Error {
         case cantGetQueryParameters
     }

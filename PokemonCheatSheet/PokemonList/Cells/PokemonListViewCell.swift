@@ -40,6 +40,7 @@ final class PokemonListViewCell: UITableViewCell {
     }
     
     private func configureUI() {
+        selectionStyle = .none
         let stackView = UIStackView(arrangedSubviews: [pokemonNameLabel, UIView(), pokemonImageView])
         stackView.axis = .horizontal
         stackView.spacing = 8

@@ -178,7 +178,7 @@
 /* Begin PBXFileReference section */
 		0CEA4C75B48FCFBD4AB4449C /* Pods-PokemonCheatSheet-PokemonCheatSheetUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PokemonCheatSheet-PokemonCheatSheetUITests.debug.xcconfig"; path = "Target Support Files/Pods-PokemonCheatSheet-PokemonCheatSheetUITests/Pods-PokemonCheatSheet-PokemonCheatSheetUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		0E6C000C52A97C4A64DB36B1 /* Pods-Domain.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Domain.debug.xcconfig"; path = "Target Support Files/Pods-Domain/Pods-Domain.debug.xcconfig"; sourceTree = "<group>"; };
-		2E18D192259B2A5D00A391A9 /* PokemonCheatSheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonCheatSheet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E18D192259B2A5D00A391A9 /* Pokemon Cheatsheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pokemon Cheatsheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E18D195259B2A5D00A391A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2E18D19E259B2A5E00A391A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E18D1A1259B2A5E00A391A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 		2E18D193259B2A5D00A391A9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2E18D192259B2A5D00A391A9 /* PokemonCheatSheet.app */,
+				2E18D192259B2A5D00A391A9 /* Pokemon Cheatsheet.app */,
 				2E18D1A8259B2A5E00A391A9 /* PokemonCheatSheetTests.xctest */,
 				2E18D1F4259B32CA00A391A9 /* Domain.framework */,
 				2E18D1FC259B32CA00A391A9 /* DomainTests.xctest */,
@@ -706,7 +706,7 @@
 			);
 			name = PokemonCheatSheet;
 			productName = PokemonCheatSheet;
-			productReference = 2E18D192259B2A5D00A391A9 /* PokemonCheatSheet.app */;
+			productReference = 2E18D192259B2A5D00A391A9 /* Pokemon Cheatsheet.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2E18D1A7259B2A5E00A391A9 /* PokemonCheatSheetTests */ = {
@@ -1403,7 +1403,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8L2S28N72Y;
 				INFOPLIST_FILE = PokemonCheatSheet/Info.plist;
@@ -1413,7 +1412,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wowbroforce.epam.PokemonCheatSheet;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = PokemonCheatSheet;
+				PRODUCT_NAME = "Pokemon Cheatsheet";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1425,7 +1425,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8L2S28N72Y;
 				INFOPLIST_FILE = PokemonCheatSheet/Info.plist;
@@ -1435,7 +1434,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wowbroforce.epam.PokemonCheatSheet;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = PokemonCheatSheet;
+				PRODUCT_NAME = "Pokemon Cheatsheet";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

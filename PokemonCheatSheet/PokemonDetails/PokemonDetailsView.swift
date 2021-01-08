@@ -47,6 +47,7 @@ final class PokemonDetailsView: UIView, PokemonDetailsViewType {
         translatesAutoresizingMaskIntoConstraints = false
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
         addSubview(stackView)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
