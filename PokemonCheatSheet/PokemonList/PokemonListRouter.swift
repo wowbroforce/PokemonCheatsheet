@@ -38,7 +38,11 @@ class PokemonListRouter {
             pokemonsUseCase: pokemonsUseCase,
             router: router
         )
-        let controller = PokemonDetailsViewController(viewModel: viewModel)
+        let view = PokemonDetailsView()
+        let controller = PokemonDetailsViewController(
+            pokemonDetailsView: view,
+            viewModel: viewModel
+        )
         
         navigationController.pushViewController(controller, animated: true)
     }

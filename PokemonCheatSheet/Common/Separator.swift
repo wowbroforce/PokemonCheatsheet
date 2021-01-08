@@ -14,6 +14,7 @@ final class VerticalSeparator: UIView {
         NSLayoutConstraint.activate([heightAnchor.constraint(equalToConstant: width)])
         
         backgroundColor = .lightGray
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     required init?(coder: NSCoder) {
@@ -28,6 +29,7 @@ final class HorizontalSeparator: UIView {
         NSLayoutConstraint.activate([widthAnchor.constraint(equalToConstant: width)])
         
         backgroundColor = .lightGray
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     required init?(coder: NSCoder) {

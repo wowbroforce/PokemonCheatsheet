@@ -16,3 +16,11 @@ struct PokemonDetailsModel {
     let stats: [(String, String)]
     let images: [Image]
 }
+
+enum PokemonDetailsModelItem {
+    case sprite(Image),
+         details(weight: Int, height: Int, types: [String]),
+         stat(name: String, value: String),
+         gallery([Image]),
+         header(String)
+}

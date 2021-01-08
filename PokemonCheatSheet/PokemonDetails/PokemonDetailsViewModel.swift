@@ -50,6 +50,8 @@ final class PokemonDetailsViewModel: ViewModelType {
             )
         }
         
+        let items = details.map(detailsToItems)
+        
         let title = pokemon
             .map { $0.name }
             .startWith(item.name)
@@ -67,6 +69,7 @@ final class PokemonDetailsViewModel: ViewModelType {
         return Output(
             fetching: activityIndicator.asDriver(),
             details: details,
+            detailItems: items,
             errors: errorTracker.asDriver(),
             navigation: back,
             title: title,
@@ -83,6 +86,21 @@ final class PokemonDetailsViewModel: ViewModelType {
         }
         return Driver.zip(images)
     }
+    
+    private func detailsToItems(model: PokemonDetailsModel) -> [PokemonDetailsModelItem] {
+        let sprite = model.images.first.flatMap { PokemonDetailsModelItem.sprite($0) }
+        let details = PokemonDetailsModelItem.details(
+            weight: model.weight,
+            height: model.height,
+            types: model.types
+        )
+        let statsHeader = PokemonDetailsModelItem.header("Stats")
+        let stats = model.stats.map { PokemonDetailsModelItem.stat(name: $0, value: $1) }
+        let galleryHeader = PokemonDetailsModelItem.header("Other Images")
+        let gallery = model.images.count > 0 ? PokemonDetailsModelItem.gallery(model.images) : nil
+        let items = [sprite, details, statsHeader] + stats + [galleryHeader, gallery]
+        return items.compactMap { $0 }
+    }
 
     struct Input {
         let back: Driver<Void>
@@ -92,6 +110,7 @@ final class PokemonDetailsViewModel: ViewModelType {
     struct Output {
         let fetching: Driver<Bool>
         let details: Driver<PokemonDetailsModel>
+        let detailItems: Driver<[PokemonDetailsModelItem]>
         let errors: Driver<Error>
         let navigation: Driver<Void>
         let title: Driver<String>
