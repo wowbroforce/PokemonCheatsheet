@@ -18,6 +18,7 @@ final class PaginatedFetcher: Fetcher {
     private let limit: Int
     private let useCase: PokemonsUseCaseType
     private let relay = BehaviorRelay<List<Element>>(value: .empty)
+    private var shouldLoadNextPage = false
     
     init(limit: Int, useCase: PokemonsUseCaseType) {
         self.limit = limit
@@ -35,7 +36,7 @@ final class PaginatedFetcher: Fetcher {
     }
     
     func next() -> Driver<Void> {
-        guard let url = relay.value.next else { return .empty() }
+        guard shouldLoadNextPage, let url = relay.value.next else { return .empty() }
         return useCase
             .next(url: url)
             .takeLast(1)
@@ -51,7 +52,9 @@ final class PaginatedFetcher: Fetcher {
     }
     
     func fetching() -> Driver<Bool> {
-        activityIndicator.asDriver()
+        activityIndicator
+            .asDriver()
+            .do(onNext: activityChange)
     }
     
     func errors() -> Driver<Error> {
@@ -65,5 +68,9 @@ final class PaginatedFetcher: Fetcher {
     private func update(list: List<Element>) {
         let mergedList = relay.value.merged(with: list)
         relay.accept(mergedList)
+    }
+    
+    private func activityChange(fetching: Bool) {
+        shouldLoadNextPage = !fetching
     }
 }

@@ -15,6 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        #if DEBUG
+        let isUnitTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        guard !isUnitTesting else {
+            return true
+        }
+        #endif
+
         let window = UIWindow(frame: UIScreen.main.bounds)
         
         Bootstrap.shared.configureMainInterface(in: window)

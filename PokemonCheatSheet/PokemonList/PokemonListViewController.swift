@@ -65,10 +65,11 @@ final class PokemonListViewController: BaseViewController {
         
         let selected = tableView.rx.itemSelected.asDriver()
         
+        let tableView = self.tableView
         let next = tableView.rx.contentOffset
             .asDriver()
             .map { _ in
-                self.tableView.isNearBottomEdge()
+                tableView.isNearBottomEdge()
             }
             .distinctUntilChanged()
             .filter { $0 }
