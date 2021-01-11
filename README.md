@@ -26,7 +26,11 @@ Usually I prefer to work with official tools, like SPM, but it doesn't work well
 * I use stack views to reduce the amount of counstaints I have to set manually.  
 * I use modules to hide the implementation details from the all layer.
 
-## Feedback
+## List Implementation
+
+I would like to add a note regarding the list screen. The API doesn't provide the images in the response. To implement the requirement I have to fetch the details for each item in the list in order to get the pokemon image. Usually it's not a good idea. The api should provide all necessary data in a single call.
+
+# Feedback
 
 All issues are addressed.
 
