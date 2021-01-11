@@ -29,12 +29,10 @@ Usually I prefer to work with official tools, like SPM, but it doesn't work well
 ## Feedback
 
 All issues are addressed.
-[x] View and ViewController together
-In my initial implementation view controllers play the role of View. It didn't make much sence to separate the UI in a separate UIView.
-[x] List pagination is missing (*)
-I have no time left to implement it. 
-[x] Views are being removed and added to StackView (using index) every time there is an update
-It was the fastest and the easyest way at that moment. Now it uses the table view instead of the stack view.
-[x] Codebase definitely needs cleanup, there are empty files, files which are not used, files likely copy-pasted from other projects without touching them [e.g.: look at author names in source]
+
+1. [x] View and ViewController together. In my initial implementation view controllers play the role of View. It didn't make much sence to separate the UI in a separate UIView.
+2. [x] List pagination is missing (*).  The first time I didn't have enough time to get the pagination done.
+3. [x] Views are being removed and added to StackView (using index) every time there is an update. It was the fastest and the easyest way at that moment. Now it uses the table view instead of the stack view.
+4. [x] Codebase definitely needs cleanup, there are empty files, files which are not used, files likely copy-pasted from other projects without touching them [e.g.: look at author names in source]
 
 I've also write some unit tests.
