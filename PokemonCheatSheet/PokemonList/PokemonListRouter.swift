@@ -10,7 +10,7 @@ import NetworkingService
 import Domain
 
 class PokemonListRouter {
-    private let navigationController: UINavigationController
+    private weak var navigationController: UINavigationController?
     
     private let pokemonsUseCaseProivider = NetworkingService.UseCaseProvider()
     
@@ -19,6 +19,7 @@ class PokemonListRouter {
     }
     
     func toList() {
+        guard let navigationController = navigationController else { return }
         let pokemonsUseCase = pokemonsUseCaseProivider.makePokemonsUseCase()
         let fetcher = PaginatedFetcher(limit: 50, useCase: pokemonsUseCase).toAny()
         let viewModel = PokemonListViewModel(
@@ -32,6 +33,7 @@ class PokemonListRouter {
     }
     
     func toDetails(of item: PokemonListItem) {
+        guard let navigationController = navigationController else { return }
         let pokemonsUseCase = pokemonsUseCaseProivider.makePokemonsUseCase()
         let router = PokemonDetailsRouter(navigationController: navigationController)
         let viewModel = PokemonDetailsViewModel(

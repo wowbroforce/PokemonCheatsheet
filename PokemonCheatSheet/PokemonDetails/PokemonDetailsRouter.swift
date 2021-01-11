@@ -8,13 +8,14 @@
 import UIKit
 
 final class PokemonDetailsRouter {
-    let navigationController: UINavigationController
+    private weak var navigationController: UINavigationController?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func toList() {
+        guard let navigationController = navigationController else { return }
         navigationController.popViewController(animated: true)
     }
 }

@@ -25,7 +25,11 @@ final class PaginatedFetcher: Fetcher {
         self.limit = limit
         self.useCase = useCase
         
-        fetchingDisposable = fetching().do(onNext: activityChange).drive()
+        fetchingDisposable = fetching()
+            .do(onNext: { [weak self] fetching in
+                self?.activityChange(fetching: fetching)
+            })
+            .drive()
     }
     
     func start() -> Driver<Void> {
@@ -34,6 +38,9 @@ final class PaginatedFetcher: Fetcher {
             .trackActivity(activityIndicator)
             .trackError(errorTracker)
             .asDriverOnErrorJustComplete()
+            .do(onNext: { [weak self] list in
+                self?.set(list: list)
+            })
             .do(onNext: set)
             .mapToVoid()
     }
@@ -46,7 +53,9 @@ final class PaginatedFetcher: Fetcher {
             .trackActivity(activityIndicator)
             .trackError(errorTracker)
             .asDriverOnErrorJustComplete()
-            .do(onNext: update)
+            .do(onNext: { [weak self] list in
+                self?.update(list: list)
+            })
             .mapToVoid()
     }
     
