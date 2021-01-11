@@ -37,15 +37,16 @@ final class PokemonDetailsHeaderCell: UITableViewCell {
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(separator)
-
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            titleLabel.bottomAnchor.constraint(equalTo: separator.topAnchor),
-            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        
+        titleLabel.edgesToSuperview(
+            excludedEdge: .bottom,
+            insets: .init(top: 8, left: 32, bottom: 0, right: 32)
+        )
+        separator.edgesToSuperview(
+            excludedEdge: .top,
+            insets: .init(top: 0, left: 32, bottom: 0, right: 32)
+        )
+        
+        titleLabel.bottomAnchor.constraint(equalTo: separator.topAnchor).isActive = true
     }
 }

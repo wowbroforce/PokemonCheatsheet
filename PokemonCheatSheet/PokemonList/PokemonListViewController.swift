@@ -10,15 +10,13 @@ import RxSwift
 import RxCocoa
 
 final class PokemonListViewController: BaseViewController {
-    private let tableView = UITableView()
+    private let pokemonListView: PokemonListViewType
     private let viewModel: PokemonListViewModel
     private let bag = DisposeBag()
-    private let refreshControl = UIRefreshControl()
-    private let stackView = UIStackView()
-    private let errorView = ErrorView()
     
-    init(viewModel: PokemonListViewModel) {
+    init(view: PokemonListViewType, viewModel: PokemonListViewModel) {
         self.viewModel = viewModel
+        self.pokemonListView = view
 
         super.init(nibName: nil, bundle: nil)
         
@@ -29,30 +27,12 @@ final class PokemonListViewController: BaseViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
-    private func configureUI() {
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView)
-
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        
-        tableView.refreshControl = refreshControl
-        tableView.rowHeight = 108
-        tableView.register(PokemonListViewCell.self, forCellReuseIdentifier: PokemonListViewCell.reuseIdentifier)
-        
-        stackView.addArrangedSubview(tableView)
-        
-        stackView.addArrangedSubview(errorView)
-
-        errorView.isHidden = true
-    }
     
+    private func configureUI() {
+        view.addSubview(pokemonListView.view)
+        pokemonListView.view.edgesToSuperview(usingSafeArea: true)
+    }
+
     private func configureBindings() {
         let viewWillAppear = rx
             .sentMessage(#selector(UIViewController.viewWillAppear(_:)))
@@ -60,13 +40,13 @@ final class PokemonListViewController: BaseViewController {
             .take(1)
             .asDriverOnErrorJustComplete()
         
-        let pull = refreshControl.rx
+        let pull = pokemonListView.refreshControl.rx
             .controlEvent(.valueChanged)
             .asDriver()
         
-        let selected = tableView.rx.itemSelected.asDriver()
+        let selected = pokemonListView.tableView.rx.itemSelected.asDriver()
         
-        let tableView = self.tableView
+        let tableView = pokemonListView.tableView
         let next = tableView.rx.contentOffset
             .asDriver()
             .map { _ in
@@ -87,7 +67,7 @@ final class PokemonListViewController: BaseViewController {
         output
             .pokemons
             .drive(
-                tableView.rx.items(
+                pokemonListView.tableView.rx.items(
                     cellIdentifier: PokemonListViewCell.reuseIdentifier,
                     cellType: PokemonListViewCell.self
                 )
@@ -96,9 +76,13 @@ final class PokemonListViewController: BaseViewController {
             }
             .disposed(by: bag)
         output.navigation.drive().disposed(by: bag)
-        output.fetching.drive(refreshControl.rx.isRefreshing).disposed(by: bag)
+        output.fetching
+            .asObservable()
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(pokemonListView.refreshControl.rx.isRefreshing)
+            .disposed(by: bag)
 
-        output.hideError.drive(errorView.rx.isHidden).disposed(by: bag)
+        output.hideError.drive(pokemonListView.errorView.rx.isHidden).disposed(by: bag)
         
         navigationItem.title = output.navigationTitle
     }

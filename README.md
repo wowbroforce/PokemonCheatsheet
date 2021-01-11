@@ -25,3 +25,16 @@ Usually I prefer to work with official tools, like SPM, but it doesn't work well
 * I thought it would be great to implement the paginated loading ot the list, but there was no time for it.
 * I use stack views to reduce the amount of counstaints I have to set manually.  
 * I use modules to hide the implementation details from the all layer.
+
+## Feedback
+
+All issues are addressed.
+[x] View and ViewController together
+In my initial implementation view controllers play the role of View. It didn't make much sence to separate the UI in a separate UIView.
+[x] List pagination is missing (*)
+I have no time left to implement it. 
+[x] Views are being removed and added to StackView (using index) every time there is an update
+It was the fastest and the easyest way at that moment. Now it uses the table view instead of the stack view.
+[x] Codebase definitely needs cleanup, there are empty files, files which are not used, files likely copy-pasted from other projects without touching them [e.g.: look at author names in source]
+
+I've also write some unit tests.

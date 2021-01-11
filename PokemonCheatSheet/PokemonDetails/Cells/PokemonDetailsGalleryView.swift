@@ -43,14 +43,8 @@ final class PokemonDetailsGalleryView: UITableViewCell {
         collectionView.dataSource = self
         collectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.reuseIdentifier)
         contentView.addSubview(collectionView)
-
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 96)
-        ])
+        collectionView.edgesToSuperview(insets: .init(top: 0, left: 32, bottom: 0, right: 32))
+        collectionView.heightAnchor.constraint(equalToConstant: 96).isActive = true
     }
 }
 
@@ -89,12 +83,6 @@ private final class ImageCollectionViewCell: UICollectionViewCell, CellReusable 
         spriteView.contentMode = .scaleAspectFit
         spriteView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(spriteView)
-        
-        NSLayoutConstraint.activate([
-            spriteView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            spriteView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            spriteView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            spriteView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        spriteView.edgesToSuperview()
     }
 }

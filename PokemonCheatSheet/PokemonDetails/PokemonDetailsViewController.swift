@@ -32,12 +32,8 @@ final class PokemonDetailsViewController: BaseViewController {
     
     private func configureUI() {
         view.addSubview(pokemonDetailsView.view)
-        NSLayoutConstraint.activate([
-            pokemonDetailsView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pokemonDetailsView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pokemonDetailsView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            pokemonDetailsView.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        pokemonDetailsView.view.edgesToSuperview(usingSafeArea: true)
+
         navigationItem.leftBarButtonItem = backButton
     }
     

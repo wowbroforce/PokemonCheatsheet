@@ -32,12 +32,6 @@ final class PokemonDetailsSpriteCell: UITableViewCell {
         spriteView.contentMode = .scaleAspectFit
         spriteView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(spriteView)
-        
-        NSLayoutConstraint.activate([
-            spriteView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            spriteView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            spriteView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            spriteView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        spriteView.edgesToSuperview()
     }
 }

@@ -60,12 +60,12 @@ final class PokemonDetailsViewCell: UITableViewCell {
         stackView.distribution = .equalCentering
         
         contentView.addSubview(stackView)
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        stackView.edgesToSuperview(
+            insets: UIEdgeInsets(
+                top: 8, left: 32,
+                bottom: 0, right: 32
+            )
+        )
 
         typeViews.forEach { $0.isHidden = true }
     }

@@ -47,17 +47,10 @@ final class PokemonListViewCell: UITableViewCell {
         stackView.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stackView)
+        stackView.edgesToSuperview(
+            insets: .init(top: 0, left: 16, bottom: 0, right: 16))
         
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            pokemonImageView.widthAnchor.constraint(equalTo: pokemonImageView.heightAnchor)
-        ])
+        pokemonImageView.widthAnchor.constraint(equalTo: pokemonImageView.heightAnchor).isActive = true
         
         pokemonNameLabel.font = UIFont.boldSystemFont(ofSize: 17)
     }

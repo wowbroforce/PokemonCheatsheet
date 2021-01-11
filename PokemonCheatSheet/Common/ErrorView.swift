@@ -26,13 +26,9 @@ final class ErrorView: UIView {
         label.textAlignment = .center
         label.textColor = .white
         addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-        ])
+        label.edgesToSuperview(
+            insets: .init(top: 16, left: 32,bottom: 16, right: 32)
+        )
         
         updateLabel()
     }

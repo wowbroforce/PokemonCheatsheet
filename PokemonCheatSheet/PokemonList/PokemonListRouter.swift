@@ -26,7 +26,8 @@ class PokemonListRouter {
             router: self,
             fetcher: fetcher
         )
-        let controller = PokemonListViewController(viewModel: viewModel)
+        let view = PokemonListView()
+        let controller = PokemonListViewController(view: view, viewModel: viewModel)
         navigationController.viewControllers = [controller]
     }
     

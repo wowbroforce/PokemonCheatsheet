@@ -11,19 +11,12 @@ import RxSwift
 import RxCocoa
 import Domain
 
-protocol PokemonDetailsViewType: AnyObject {
-    var view: UIView { get }
+protocol PokemonDetailsViewType: ViewContainable {
     var tableView: UITableView { get }
     var activityIndicator: UIActivityIndicatorView { get }
     var errorView: ErrorView { get }
     
     func cellFactory(tableView: UITableView, row: Int, element: PokemonDetailsModelItem) -> UITableViewCell
-}
-
-extension PokemonDetailsViewType where Self: UIView {
-    var view: UIView {
-        return self
-    }
 }
 
 final class PokemonDetailsView: UIView, PokemonDetailsViewType {
@@ -49,12 +42,7 @@ final class PokemonDetailsView: UIView, PokemonDetailsViewType {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         addSubview(stackView)
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-        ])
+        stackView.edgesToSuperview(usingSafeArea: true)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.estimatedRowHeight = 100
@@ -74,12 +62,7 @@ final class PokemonDetailsView: UIView, PokemonDetailsViewType {
         errorView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(errorView)
-        
-        NSLayoutConstraint.activate([
-            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            errorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        errorView.edgesToSuperview(excludedEdge: .top)
     }
 }
 
